@@ -26,32 +26,19 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const personalCollection = client.db("loan-app").collection("personal");
-    const businessCollection = client.db("loan-app").collection("business");
-    const loanCollection = client.db("loan-app").collection("loan");
 
-    app.get("/", async (req, res) => {
-      res.send("server is running well");
+    app.get("/saveInfo", async (req, res) => {
+      const query = {};
+      const result = await personalCollection.find(query).toArray();
+      res.send(result);
     });
 
-    app.get('/getProfile', async(req, res)=>{
-        
-    })
+    app.get("/getProfile", async (req, res) => {});
 
     app.post("/saveInfo", async (req, res) => {
-      const category = req.query.category;
       const info = req.body;
-      if (category === "personal") {
-        const result = await personalCollection.insertOne(info);
-        res.send(result);
-      }
-      else if (category === "business") {
-        const result = await businessCollection.insertOne(info);
-        res.send(result);
-      } else {
-        const result = await loanCollection.insertOne(info);
-        res.send(result);
-      }
-      
+      const result = await personalCollection.insertOne(info);
+      res.send(result);
     });
   } finally {
   }
