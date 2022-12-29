@@ -33,13 +33,19 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/getProfile", async (req, res) => {});
-
     app.post("/saveInfo", async (req, res) => {
       const info = req.body;
       const result = await personalCollection.insertOne(info);
       res.send(result);
     });
+
+    app.delete('/deleteProfile/:id', async(req, res)=> {
+        const id = req.params.id;
+        const query = {_id: ObjectId(id)};
+        const result = await personalCollection.deleteOne(query);
+        res.send(result);
+    })
+
   } finally {
   }
 }
